@@ -9,7 +9,7 @@ RUN apk --no-cache add tzdata && \
 RUN apk --no-cache add jemalloc
 ENV LD_PRELOAD=/usr/lib/libjemalloc.so.2
 
-ENV NODE_OPTIONS="--max-old-space-size=2048"
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 COPY . .
 RUN corepack enable pnpm
