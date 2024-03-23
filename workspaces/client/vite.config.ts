@@ -1,12 +1,10 @@
 // import fs from 'node:fs';
 import path from 'node:path';
 
-import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill'
-import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill'
+import inject from '@rollup/plugin-inject'
 import react from '@vitejs/plugin-react';
-import {polyfillNode} from "esbuild-plugin-polyfill-node";
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 import {defineConfig} from 'vite';
+import {nodePolyfills} from "vite-plugin-node-polyfills";
 
 // Assuming findWorkspaceDir and findPackageDir work similarly in a Vite environment or you have equivalent implementations
 const PACKAGE_DIR = path.resolve(__dirname); // Assuming this file is at the project root, adjust as necessary
@@ -31,11 +29,18 @@ export default defineConfig({
       // },
       plugins: [
         // @ts-ignore
-        rollupNodePolyFill(),
+        // rollupNodePolyFill(),
+        inject({
+          // cbor-x checks for Buffer on the global object, and the polyfills plugin doesn't cover this case for the
+          // production build (but works in development because Buffer gets injected as a banner, so it's "naturally"
+          // available on the global object)
+          "globalThis.Buffer": ["buffer", "Buffer"],
+        }),
       ]
     },
     sourcemap: true,
     target: 'esnext',
+
     // Other options as per your requirement
   },
   define: {
@@ -52,31 +57,31 @@ export default defineConfig({
       },
       // Enable esbuild polyfill plugins
       plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-          process: true
-        }),
-        NodeModulesPolyfillPlugin(),
-        polyfillNode({
-          globals: {
-            process: false,
-          },
-          polyfills: {
-            events: true,
-            fs: true,
-            path: true,
-          },
-        }),
+        // NodeGlobalsPolyfillPlugin({
+        //   buffer: true,
+        //   process: true
+        // }),
+        // NodeModulesPolyfillPlugin()
+        // // polyfillNode({
+        // //   globals: {
+        // //     process: false,
+        // //   },
+        // //   polyfills: {
+        // //     events: true,
+        // //     fs: true,
+        // //     path: true,
+        // //   },
+        // // }),
       ],
     }
   },
   plugins: [
     react(), // Enables React fast refresh and other features
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+      },
+      include: ["buffer"],
+    }),
   ],
-  resolve: {
-    alias: {
-      buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-      'node:buffer': 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-    },
-  },
 });
