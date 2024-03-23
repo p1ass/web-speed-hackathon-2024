@@ -30,5 +30,7 @@ export const book = sqliteTable('book', {
 },(table) => {
   return {
     createdAt: index("book_created_at_idx").on(table.createdAt),
+    authorId: index("book_created_at_idx").on(table.authorId,table.name),
+    name: index("book_created_at_idx").on(table.name),
   };
 });

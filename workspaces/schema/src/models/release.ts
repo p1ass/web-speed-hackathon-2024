@@ -1,7 +1,7 @@
 /* eslint-disable sort/object-properties */
 import { randomUUID } from 'node:crypto';
 
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {index, sqliteTable, text} from 'drizzle-orm/sqlite-core';
 
 export const release = sqliteTable('release', {
   // primary key
@@ -19,4 +19,8 @@ export const release = sqliteTable('release', {
   updatedAt: text('updated_at')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
+},(table) => {
+  return {
+    dayOfWeek:index("release_day_of_week_idx").on(table.dayOfWeek),
+  };
 });
