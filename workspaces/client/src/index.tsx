@@ -1,5 +1,8 @@
 // import './side-effects';
 
+/* eslint-disable unicorn/prefer-node-protocol */
+import { Buffer } from 'buffer'
+
 import $ from 'jquery';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -10,6 +13,9 @@ import { ClientApp } from '@wsh-2024/app/src/index';
 
 // import { preloadImages } from './utils/preloadImages';
 import { registerServiceWorker } from './utils/registerServiceWorker';
+
+
+window.Buffer = window.Buffer || Buffer
 
 const main = async () => {
   await registerServiceWorker();
