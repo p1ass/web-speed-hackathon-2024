@@ -90,17 +90,28 @@ app.get(
       throw new HTTPException(501, { message: `Image format: ${resImgFormat} is not supported.` });
     }
 
+    const width = c.req.valid('query').width;
+    const height = c.req.valid('query').height;
+
     const origFileGlob = [path.resolve(IMAGES_PATH, `${reqImgId}`), path.resolve(IMAGES_PATH, `${reqImgId}.*`)];
-    const [origFilePath] = await globby(origFileGlob, { absolute: true, onlyFiles: true });
-    if (origFilePath == null) {
+    const result = await globby(origFileGlob, { absolute: true, onlyFiles: true });
+    if (result.length === 0) {
       throw new HTTPException(404, { message: 'Not found.' });
     }
 
+    // 最適な画像がある
+    const saitekiImageName = path.resolve(IMAGES_PATH, `${reqImgId}.${width}x${height}.${resImgFormat}`)
+    if (result.includes(saitekiImageName)){
+      c.header('Content-Type', IMAGE_MIME_TYPE[resImgFormat]);
+      return c.body(createStreamBody(createReadStream(saitekiImageName)));
+    }
+
+    const origFilePath =result.slice(-1)[0] as string
     const origImgFormat = path.extname(origFilePath).slice(1);
     if (!isSupportedImageFormat(origImgFormat)) {
       throw new HTTPException(500, { message: 'Failed to load image.' });
     }
-    if (resImgFormat === origImgFormat && c.req.valid('query').width == null && c.req.valid('query').height == null) {
+    if (resImgFormat === origImgFormat && width == null && height == null) {
       // 画像変換せずにそのまま返す
       c.header('Content-Type', IMAGE_MIME_TYPE[resImgFormat]);
       return c.body(createStreamBody(createReadStream(origFilePath)));
