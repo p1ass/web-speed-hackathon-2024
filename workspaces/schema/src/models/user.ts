@@ -1,7 +1,7 @@
 /* eslint-disable sort/object-properties */
 import { randomUUID } from 'node:crypto';
 
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {index, sqliteTable, text} from 'drizzle-orm/sqlite-core';
 
 export const user = sqliteTable('user', {
   // primary key
@@ -24,4 +24,8 @@ export const user = sqliteTable('user', {
   updatedAt: text('updated_at')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
+},(table) => {
+  return {
+    email:index("user_email_idx").on(table.email),
+  };
 });
