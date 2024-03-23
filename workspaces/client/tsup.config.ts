@@ -19,9 +19,9 @@ export default defineConfig(async (): Promise<Options[]> => {
   return [
     {
       bundle: true,
-      clean: true,
+      clean: false,
       entry: {
-        client: path.resolve(PACKAGE_DIR, './src/index.tsx'),
+        // client: path.resolve(PACKAGE_DIR, './src/index.tsx'),
         serviceworker: path.resolve(PACKAGE_DIR, './src/serviceworker/index.ts'),
       },
       env: {
@@ -64,7 +64,6 @@ export default defineConfig(async (): Promise<Options[]> => {
       splitting: true,
       target: ['chrome58', 'firefox57', 'safari11', 'edge18'],
       treeshake: true
-
     },
   ];
 });
