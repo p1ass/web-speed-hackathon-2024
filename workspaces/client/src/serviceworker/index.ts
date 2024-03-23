@@ -1,10 +1,9 @@
 /// <reference types="@types/serviceworker" />
 import PQueue from 'p-queue';
 
-
 import {jitter} from "./jitter";
-import { transformJpegXLToBmp } from './transformJpegXLToBmp';
-import { zstdFetch as fetch } from './zstdFetch';
+import {transformJpegXLToBmp} from './transformJpegXLToBmp';
+import {zstdFetch as fetch} from './zstdFetch';
 
 // ServiceWorker が負荷で落ちないように並列リクエスト数を制限する
 const queue = new PQueue({
@@ -21,9 +20,9 @@ self.addEventListener('activate', (ev: ExtendableEvent) => {
 
 self.addEventListener('fetch', (ev: FetchEvent) => {
   ev.respondWith(
-    queue.add(() => onFetch(ev.request), {
-      throwOnTimeout: true,
-    }),
+      queue.add(() => onFetch(ev.request), {
+        throwOnTimeout: true,
+      }),
   );
 });
 
