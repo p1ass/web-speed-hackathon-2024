@@ -59,7 +59,6 @@ export default defineConfig(async (): Promise<Options[]> => {
       outDir: OUTPUT_DIR,
       platform: 'browser',
       shims: true,
-      skipNodeModulesBundle:true,
       sourcemap: 'inline',
       splitting: true,
       target: ['chrome120'],
