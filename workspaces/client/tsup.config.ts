@@ -48,20 +48,23 @@ export default defineConfig(async (): Promise<Options[]> => {
           },
         }),
       ],
-      format: 'iife',
+      format: ['esm','iife'],
       loader: {
         '.json?file': 'file',
         '.wasm': 'binary',
       },
       metafile: true,
-      minify: false,
+      minify: true,
+      noExternal: [/.+/],
       outDir: OUTPUT_DIR,
       platform: 'browser',
       shims: true,
+      skipNodeModulesBundle:false,
       sourcemap: 'inline',
-      splitting: false,
+      splitting: true,
       target: ['chrome58', 'firefox57', 'safari11', 'edge18'],
-      treeshake: false,
+      treeshake: true
+
     },
   ];
 });
