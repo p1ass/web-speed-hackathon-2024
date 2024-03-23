@@ -30,7 +30,7 @@ const _ImgWrapper = styled.div`
 
 type Props = {
   bookId: string;
-  episode: GetEpisodeResponse;
+  episode: Pick<GetEpisodeResponse, "image" | "id" | "chapter" | "name" | "description">;
 };
 
 export const EpisodeListItem: React.FC<Props> = ({bookId, episode}) => {
