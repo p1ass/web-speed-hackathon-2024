@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import inject from '@rollup/plugin-inject'
 import react from '@vitejs/plugin-react';
+import visualizer from "rollup-plugin-visualizer";
 import {defineConfig} from 'vite';
 import {nodePolyfills} from "vite-plugin-node-polyfills";
 
@@ -36,6 +37,7 @@ export default defineConfig({
           // available on the global object)
           "globalThis.Buffer": ["buffer", "Buffer"],
         }),
+        visualizer(),
       ]
     },
     sourcemap: true,

@@ -1,30 +1,25 @@
-import { useSetAtom } from 'jotai';
-import React, {Suspense, useId} from 'react';
+import {useSetAtom} from 'jotai';
+import React, {Suspense} from 'react';
 import styled from 'styled-components';
 
-import { DialogContentAtom } from '../atoms/DialogContentAtom';
-import { COMPANY } from '../constants/Company';
-import { CONTACT } from '../constants/Contact';
-import { OVERVIEW } from '../constants/Overview';
-import { QUESTION } from '../constants/Question';
-import { Color, Space, Typography } from '../styles/variables';
+import {DialogContentAtom} from '../atoms/DialogContentAtom';
+import {Color, Space} from '../styles/variables';
 
-import { Box } from './Box';
-import { Button } from './Button';
-import { Flex } from './Flex';
-import { Spacer } from './Spacer';
-import { Text } from './Text';
+import {Box} from './Box';
+import {Button} from './Button';
+import {Flex} from './Flex';
 
 
 const TermDialogContentLazy = React.lazy(() => import("./internal/TermDialogContent"));
+const CompanyDialogContentLazy = React.lazy(() => import("./internal/CompanyDialogContent"));
+const ContactyDialogContentLazy = React.lazy(() => import("./internal/ContactDialogContent"));
+const QuestionDialogContentLazy = React.lazy(() => import("./internal/QuestionDialogContent"));
+const OverviewDialogContentLazy = React.lazy(() => import("./internal/OverviewDialogContent"));
 
 const _Button = styled(Button)`
   color: ${Color.MONO_A};
 `;
 
-const _Content = styled.section`
-  white-space: pre-line;
-`;
 
 export const Footer: React.FC = () => {
   const [isClient, setIsClient] = React.useState(false);
@@ -34,11 +29,6 @@ export const Footer: React.FC = () => {
   }, []);
 
 
-  const contactDialogA11yId = useId();
-  const questionDialogA11yId = useId();
-  const companyDialogA11yId = useId();
-  const overviewDialogA11yId = useId();
-
   const updateDialogContent = useSetAtom(DialogContentAtom);
 
 
@@ -46,89 +36,66 @@ export const Footer: React.FC = () => {
 
     updateDialogContent(
         <Suspense fallback={<div>Loading...</div>}>
-          <TermDialogContentLazy />
+          <TermDialogContentLazy/>
         </Suspense>,
     );
   };
 
   const handleRequestToContactDialogOpen = () => {
     updateDialogContent(
-      <_Content aria-labelledby={contactDialogA11yId} role="dialog">
-        <Text as="h2" color={Color.MONO_100} id={contactDialogA11yId} typography={Typography.NORMAL16}>
-          お問い合わせ
-        </Text>
-        <Spacer height={Space * 1} />
-        <Text as="p" color={Color.MONO_100} typography={Typography.NORMAL12}>
-          {CONTACT}
-        </Text>
-      </_Content>,
+        <Suspense fallback={<div>Loading...</div>}>
+          <ContactyDialogContentLazy/>
+        </Suspense>,
     );
   };
 
   const handleRequestToQuestionDialogOpen = () => {
     updateDialogContent(
-      <_Content aria-labelledby={questionDialogA11yId} role="dialog">
-        <Text as="h2" color={Color.MONO_100} id={questionDialogA11yId} typography={Typography.NORMAL16}>
-          Q&A
-        </Text>
-        <Spacer height={Space * 1} />
-        <Text as="p" color={Color.MONO_100} typography={Typography.NORMAL12}>
-          {QUESTION}
-        </Text>
-      </_Content>,
+        <Suspense fallback={<div>Loading...</div>}>
+          <QuestionDialogContentLazy/>
+        </Suspense>,
     );
   };
 
   const handleRequestToCompanyDialogOpen = () => {
     updateDialogContent(
-      <_Content aria-labelledby={companyDialogA11yId} role="dialog">
-        <Text as="h2" color={Color.MONO_100} id={companyDialogA11yId} typography={Typography.NORMAL16}>
-          運営会社
-        </Text>
-        <Spacer height={Space * 1} />
-        <Text as="p" color={Color.MONO_100} typography={Typography.NORMAL12}>
-          {COMPANY}
-        </Text>
-      </_Content>,
+        <Suspense fallback={<div>Loading...</div>}>
+          <CompanyDialogContentLazy/>
+        </Suspense>,
     );
   };
 
   const handleRequestToOverviewDialogOpen = () => {
     updateDialogContent(
-      <_Content aria-labelledby={overviewDialogA11yId} role="dialog">
-        <Text as="h2" color={Color.MONO_100} id={overviewDialogA11yId} typography={Typography.NORMAL16}>
-          Cyber TOONとは
-        </Text>
-        <Spacer height={Space * 1} />
-        <Text as="p" color={Color.MONO_100} typography={Typography.NORMAL12}>
-          {OVERVIEW}
-        </Text>
-      </_Content>,
+        <Suspense fallback={<div>Loading...</div>}>
+          <OverviewDialogContentLazy/>
+        </Suspense>
+        ,
     );
   };
 
   return (
-    <Box as="footer" backgroundColor={Color.Background} p={Space * 1}>
-      <Flex align="flex-start" direction="column" gap={Space * 1} justify="flex-start">
-        <img alt="Cyber TOON" src="/assets/cyber-toon.svg" />
-        <Flex align="start" direction="row" gap={Space * 1.5} justify="center">
-          <_Button disabled={!isClient} onClick={handleRequestToTermDialogOpen}>
-            利用規約
-          </_Button>
-          <_Button disabled={!isClient} onClick={handleRequestToContactDialogOpen}>
-            お問い合わせ
-          </_Button>
-          <_Button disabled={!isClient} onClick={handleRequestToQuestionDialogOpen}>
-            Q&A
-          </_Button>
-          <_Button disabled={!isClient} onClick={handleRequestToCompanyDialogOpen}>
-            運営会社
-          </_Button>
-          <_Button disabled={!isClient} onClick={handleRequestToOverviewDialogOpen}>
-            Cyber TOONとは
-          </_Button>
+      <Box as="footer" backgroundColor={Color.Background} p={Space * 1}>
+        <Flex align="flex-start" direction="column" gap={Space * 1} justify="flex-start">
+          <img alt="Cyber TOON" src="/assets/cyber-toon.svg"/>
+          <Flex align="start" direction="row" gap={Space * 1.5} justify="center">
+            <_Button disabled={!isClient} onClick={handleRequestToTermDialogOpen}>
+              利用規約
+            </_Button>
+            <_Button disabled={!isClient} onClick={handleRequestToContactDialogOpen}>
+              お問い合わせ
+            </_Button>
+            <_Button disabled={!isClient} onClick={handleRequestToQuestionDialogOpen}>
+              Q&A
+            </_Button>
+            <_Button disabled={!isClient} onClick={handleRequestToCompanyDialogOpen}>
+              運営会社
+            </_Button>
+            <_Button disabled={!isClient} onClick={handleRequestToOverviewDialogOpen}>
+              Cyber TOONとは
+            </_Button>
+          </Flex>
         </Flex>
-      </Flex>
-    </Box>
+      </Box>
   );
 };
