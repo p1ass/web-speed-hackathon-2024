@@ -4,9 +4,9 @@ type Props = {
   children: React.ReactNode;
 } & JSX.IntrinsicElements['a'];
 
-export const Link: React.FC<Props> = ({children, href,}) => {
+export const Link: React.FC<Props> = ({children, className,href}) => {
   return (
-      <ReactLink to={href ?? '/'}>
+      <ReactLink className={className} to={href ?? '/'}>
         {children}
       </ReactLink>
   );
