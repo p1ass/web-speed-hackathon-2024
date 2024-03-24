@@ -15,13 +15,22 @@ export const SearchPage: React.FC = () => {
 
   const [isClient, setIsClient] = useState(false);
   const [keyword, setKeyword] = useState('');
+  const [input, setInput] = useState('');
 
   const onChangedInput = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        setKeyword(event.target.value);
+        setInput(event.target.value);
       },
-      [setKeyword],
+      [setInput],
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setKeyword(input)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [input])
 
   useEffect(() => {
     setIsClient(true);
