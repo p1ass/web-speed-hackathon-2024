@@ -32,6 +32,7 @@ const TopPage: React.FC = () => {
         <Box as="header" maxWidth="100%" width="100%">
           <CoverSection/>
         </Box>
+        <Suspense fallback={null}>
         <Box as="main" maxWidth="100%" width="100%">
           <Box aria-labelledby={pickupA11yId} as="section" maxWidth="100%" mt={16} width="100%">
             <Text as="h2" color={Color.MONO_100} id={pickupA11yId} typography={Typography.NORMAL20}
@@ -82,15 +83,16 @@ const TopPage: React.FC = () => {
             </Box>
           </Box>
         </Box>
+        </Suspense>
       </Flex>
   );
 };
 
 const TopPageWithSuspense: React.FC = () => {
   return (
-      <Suspense fallback={null}>
+      // <Suspense fallback={null}>
         <TopPage/>
-      </Suspense>
+      // </Suspense>
   );
 };
 
