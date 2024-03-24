@@ -1,29 +1,31 @@
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { HTTPException } from 'hono/http-exception';
-import { secureHeaders } from 'hono/secure-headers';
+import {Hono} from 'hono';
+import {compress} from 'hono/compress'
+import {cors} from 'hono/cors';
+import {HTTPException} from 'hono/http-exception';
+import {secureHeaders} from 'hono/secure-headers';
 
-import { cacheControlMiddleware } from '../middlewares/cacheControlMiddleware';
+import {cacheControlMiddleware} from '../middlewares/cacheControlMiddleware';
 
-import { adminApp } from './admin';
-import { apiApp } from './api';
-import { imageApp } from './image';
-import { ssrApp } from './ssr';
-import { staticApp } from './static';
+import {adminApp} from './admin';
+import {apiApp} from './api';
+import {imageApp} from './image';
+import {ssrApp} from './ssr';
+import {staticApp} from './static';
 
 const app = new Hono();
 
 app.use(secureHeaders());
 app.use(
-  cors({
-    allowHeaders: ['Content-Type', 'Accept-Encoding', 'X-Accept-Encoding', 'Authorization'],
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    credentials: true,
-    exposeHeaders: ['Content-Encoding', 'X-Content-Encoding'],
-    origin: (origin) => origin,
-  }),
+    cors({
+      allowHeaders: ['Content-Type', 'Accept-Encoding', 'X-Accept-Encoding', 'Authorization'],
+      allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+      credentials: true,
+      exposeHeaders: ['Content-Encoding', 'X-Content-Encoding'],
+      origin: (origin) => origin,
+    }),
 );
 // app.use(compressMiddleware);
+app.use(compress({encoding: "gzip"}));
 app.use(cacheControlMiddleware);
 
 app.get('/healthz', (c) => {
@@ -49,4 +51,4 @@ app.onError((cause) => {
   return err.getResponse();
 });
 
-export { app };
+export {app};
