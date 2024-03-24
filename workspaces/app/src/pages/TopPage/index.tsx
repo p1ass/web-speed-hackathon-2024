@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import moment from 'moment-timezone';
 import {Suspense, useId} from 'react';
 
 import {BookCard} from '../../features/book/components/BookCard';
@@ -18,7 +17,7 @@ import {getDayOfWeekStr} from '../../lib/date/getDayOfWeekStr';
 import {CoverSection} from './internal/CoverSection';
 
 const TopPage: React.FC = () => {
-  const todayStr = getDayOfWeekStr(moment());
+  const todayStr = getDayOfWeekStr(new Date());
   const {data: release} = useRelease({params: {dayOfWeek: todayStr}});
   const {data: featureList} = useFeatureList({query: {}});
   const {data: rankingList} = useRankingList({query: {}});
@@ -33,56 +32,58 @@ const TopPage: React.FC = () => {
           <CoverSection/>
         </Box>
         <Suspense fallback={null}>
-        <Box as="main" maxWidth="100%" width="100%">
-          <Box aria-labelledby={pickupA11yId} as="section" maxWidth="100%" mt={16} width="100%">
-            <Text as="h2" color={Color.MONO_100} id={pickupA11yId} typography={Typography.NORMAL20}
-                  weight="bold">
-              ピックアップ
-            </Text>
+          <Box as="main" maxWidth="100%" width="100%">
+            <Box aria-labelledby={pickupA11yId} as="section" maxWidth="100%" mt={16} width="100%">
+              <Text as="h2" color={Color.MONO_100} id={pickupA11yId}
+                    typography={Typography.NORMAL20}
+                    weight="bold">
+                ピックアップ
+              </Text>
+              <Spacer height={Space * 2}/>
+              <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
+                <Flex align="stretch" direction="row" gap={Space * 2} justify="flex-start">
+                  {_.map(featureList, (feature) => (
+                      <FeatureCard key={feature.id} book={feature.book}/>
+                  ))}
+                </Flex>
+              </Box>
+            </Box>
+
             <Spacer height={Space * 2}/>
-            <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
-              <Flex align="stretch" direction="row" gap={Space * 2} justify="flex-start">
-                {_.map(featureList, (feature) => (
-                    <FeatureCard key={feature.id} book={feature.book}/>
-                ))}
-              </Flex>
+
+            <Box aria-labelledby={rankingA11yId} as="section" maxWidth="100%" width="100%">
+              <Text as="h2" color={Color.MONO_100} id={rankingA11yId}
+                    typography={Typography.NORMAL20}
+                    weight="bold">
+                ランキング
+              </Text>
+              <Spacer height={Space * 2}/>
+              <Box maxWidth="100%" overflowX="hidden" overflowY="hidden">
+                <Flex align="center" as="ul" direction="column" justify="center">
+                  {_.map(rankingList, (ranking) => (
+                      <RankingCard key={ranking.id} book={ranking.book}/>
+                  ))}
+                </Flex>
+              </Box>
+            </Box>
+
+            <Spacer height={Space * 2}/>
+
+            <Box aria-labelledby={todayA11yId} as="section" maxWidth="100%" width="100%">
+              <Text as="h2" color={Color.MONO_100} id={todayA11yId} typography={Typography.NORMAL20}
+                    weight="bold">
+                本日更新
+              </Text>
+              <Spacer height={Space * 2}/>
+              <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
+                <Flex align="stretch" gap={Space * 2} justify="flex-start">
+                  {_.map(release.books, (book) => (
+                      <BookCard key={book.id} book={book}/>
+                  ))}
+                </Flex>
+              </Box>
             </Box>
           </Box>
-
-          <Spacer height={Space * 2}/>
-
-          <Box aria-labelledby={rankingA11yId} as="section" maxWidth="100%" width="100%">
-            <Text as="h2" color={Color.MONO_100} id={rankingA11yId} typography={Typography.NORMAL20}
-                  weight="bold">
-              ランキング
-            </Text>
-            <Spacer height={Space * 2}/>
-            <Box maxWidth="100%" overflowX="hidden" overflowY="hidden">
-              <Flex align="center" as="ul" direction="column" justify="center">
-                {_.map(rankingList, (ranking) => (
-                    <RankingCard key={ranking.id} book={ranking.book}/>
-                ))}
-              </Flex>
-            </Box>
-          </Box>
-
-          <Spacer height={Space * 2}/>
-
-          <Box aria-labelledby={todayA11yId} as="section" maxWidth="100%" width="100%">
-            <Text as="h2" color={Color.MONO_100} id={todayA11yId} typography={Typography.NORMAL20}
-                  weight="bold">
-              本日更新
-            </Text>
-            <Spacer height={Space * 2}/>
-            <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
-              <Flex align="stretch" gap={Space * 2} justify="flex-start">
-                {_.map(release.books, (book) => (
-                    <BookCard key={book.id} book={book}/>
-                ))}
-              </Flex>
-            </Box>
-          </Box>
-        </Box>
         </Suspense>
       </Flex>
   );
@@ -91,7 +92,7 @@ const TopPage: React.FC = () => {
 const TopPageWithSuspense: React.FC = () => {
   return (
       // <Suspense fallback={null}>
-        <TopPage/>
+      <TopPage/>
       // </Suspense>
   );
 };
