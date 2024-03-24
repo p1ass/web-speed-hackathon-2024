@@ -38,3 +38,4 @@ export const EpisodeDetailPage: React.FC = () => {
 };
 
 export default EpisodeDetailPage
+
