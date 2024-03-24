@@ -1,13 +1,13 @@
-import {lazy, Suspense} from 'react';
+import {lazy} from 'react';
 
 
 const TopPage = lazy(() => import('./TopPage'));
 
 const TopPageWithSuspense: React.FC = () => {
   return (
-      <Suspense fallback={null}>
+      // <Suspense fallback={null}>
         <TopPage/>
-      </Suspense>
+      // </Suspense>
   );
 };
 
